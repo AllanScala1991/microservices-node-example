@@ -19,9 +19,9 @@ export interface Response {
 export interface IUserService {
     create(user: IUserCreated): Promise<Response>
     login(username: String, password: String): Promise<Response>
-    findByName(name: String): Promise<Response>
     findById(id: String): Promise<Response>
     findAll(): Promise<Response>
-    update(user: IUserResponse): Promise<Response>
-    delete(id: String)
+    existsUserByMailOrUsername(email: string, username: string): Promise<Response>
+    update(user: IUserResponse, id: string): Promise<Response>
+    delete(id: String): Promise<Response>
 }

@@ -23,7 +23,9 @@ export class UserService implements IUserService {
                 }
             })
 
-            return {status: 201, data: {name: createdUser.name, email: createdUser.email, phone: createdUser.phone, username: createdUser.username}}
+            if(user) delete createdUser.password;
+
+            return {status: 201, data: createdUser}
             
         } catch (error) {
             return {status: 500, message: error}
@@ -53,25 +55,99 @@ export class UserService implements IUserService {
         }
     }
 
-    findByName(name: string): Promise<Response> {
-        throw new Error("Method not implemented.");
+    async findById(id: string): Promise<Response> {
+        try {
+            const user = await this.userRepository.user.findUnique({
+                where: {
+                    id: id
+                }
+            })
+
+            if(user) delete user.password;
+
+            return {status: 200, data: user}
+        } catch (error) {
+            return {status: 500, message: error}
+        }
     }
 
-    findById(id: string): Promise<Response> {
-        throw new Error("Method not implemented.");
+    async findAll(): Promise<Response> {
+        try {
+            const users = await this.userRepository.user.findMany()
+            let usersResponse = []
+
+            for(let user of users) {
+                delete user.password;
+                usersResponse.push(user);
+            }
+
+            return {status: 200, data: usersResponse}
+
+        } catch (error) {
+            return {status: 500, message: error}
+        }
     }
 
-    findAll(): Promise<Response> {
-        throw new Error("Method not implemented.");
+    async existsUserByMailOrUsername(email: string, username: string): Promise<Response> {
+        try {
+            const user = await this.userRepository.user.findFirst({
+                where: {
+                    OR: [
+                        {
+                            email: email
+                        },
+                        {
+                            username: username
+                        }
+                    ]
+                }
+
+            })
+
+            if(user) delete user.password;
+
+            return {status: 200, data: user}
+        } catch (error) {
+            return {status: 500, message: error}
+        }
     }
 
-    update(user: IUserResponse): Promise<Response> {
-        throw new Error("Method not implemented.");
+    async update(user: IUserResponse, id: string): Promise<Response> {
+        try {
+            const userUpdated = await this.userRepository.user.update({
+                where: {
+                    id: id
+                },
+                data: {
+                    name: user.name,
+                    phone: user.phone,
+                    email: user.email,
+                    username: user.username,
+                    updateAt: new Date()
+                }
+            })
+
+            delete userUpdated.password
+
+            return {status: 200, data: userUpdated}
+
+        } catch (error) {
+            return {status: 500, message: error}
+        }
     }
 
-    delete(id: string): void {
-        throw new Error("Method not implemented.");
-    }
+    async delete(id: string): Promise<Response> {
+        try {
+            await this.userRepository.user.delete({
+                where: {
+                    id: id
+                }
+            })
 
-  
+            return {status: 200, message: "Usuário deletado com sucesso."}
+
+        } catch (error) {
+            return {status: 500, message: error}
+        }
+    }
 }
