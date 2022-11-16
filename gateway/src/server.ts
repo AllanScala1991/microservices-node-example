@@ -32,6 +32,7 @@ app.use("/doctor", proxy(MICROSERVICE.DOCTOR))
 app.use("/insurance", proxy(MICROSERVICE.INSURANCE_MEDICAL))
 app.use("/email", proxy(MICROSERVICE.EMAIL))
 app.use("/financial", proxy(MICROSERVICE.FINANCIAL))
+app.use("/auth", proxy(MICROSERVICE.AUTHENTICATION))
 
 app.listen(PORT, () => {
     console.log("Gateway is running");

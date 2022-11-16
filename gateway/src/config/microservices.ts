@@ -8,5 +8,6 @@ export enum MICROSERVICE {
     DOCTOR = "http://localhost:3005",
     INSURANCE_MEDICAL = "http://localhost:3006",
     EMAIL = "http://localhost:3007",
-    FINANCIAL = "http://localhost:3008"
+    FINANCIAL = "http://localhost:3008",
+    AUTHENTICATION = "http://localhost:3009"
 }

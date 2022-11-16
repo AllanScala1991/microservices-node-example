@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:14.5
+    container_name: medical_helper_db
+    environment:
+      POSTGRES_PASSWORD: "root"
+    ports:
+      - 5432:5432
