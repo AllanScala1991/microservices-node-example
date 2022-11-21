@@ -5,7 +5,7 @@ import "dotenv/config"
 
 const app: Express = express();
 const port: number = parseInt(process.env.PORT) || 3009
-const whiteList : Array<String> = [process.env.GATEWAY];
+const whiteList : Array<String> = [process.env.GATEWAY, process.env.USER_SERVICE];
 
 const corsOptions = {
     origin: function (origin, callback) {

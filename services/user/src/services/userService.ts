@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { Encrypter } from "../../utils/bcryptjs";
 import { IUserCreated, Response, IUserResponse, IUserService } from "../dto/userDTO";
 import {UserRepository} from "../repository/userRepository";
-
+import axios from "axios";
 export class UserService implements IUserService {
     constructor(
         private readonly userRepository: PrismaClient = new UserRepository(),
@@ -47,8 +47,11 @@ export class UserService implements IUserService {
             if(!passwordIsValid) return {status: 401, message: "Usuário ou Senha incorretos, tente novamente."}
 
             // CRIAR O TOKEN APOS O MICROSERVICO DE AUTENTICACAO FOR CRIADO
+            const auth = await this.getToken(usernameIsValid.name, usernameIsValid.email);
 
-            return {status: 200, token: "teste"}
+            if(!auth.data.token) return {status: 401, message: "Usuário ou Senha incorretos, tente novamente."}
+
+            return {status: 200, token: auth.data.token}
             
         } catch (error) {
             return {status: 500, message: error}
@@ -150,4 +153,11 @@ export class UserService implements IUserService {
             return {status: 500, message: error}
         }
     }
+
+        private async getToken(name: string, email: string): Promise<{data: {status: number, token?: string, message?: string}}> {
+            return await axios.post(process.env.TOKEN_SERVICE, {
+                name: name,
+                email: email
+            })
+        }
 }
