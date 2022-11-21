@@ -1,18 +1,23 @@
 import { Encrypter } from "../../utils/bcryptjs";
 import { IUserCreated, Response, IUserService, IUserResponse } from "../dto/userDTO";
+import { EmailValidatorService } from "../services/emailValidatorService";
 import { UserService } from "../services/userService";
 
 export class UserController implements IUserService {
     constructor(
         private readonly userService: UserService = new UserService(),
-        private readonly encrypter: Encrypter = new Encrypter()
+        private readonly encrypter: Encrypter = new Encrypter(),
+        private readonly emailValidatorService: EmailValidatorService = new EmailValidatorService()
     ) {}
 
     async create(user: IUserCreated): Promise<Response> {
         if(!user.name || !user.email || !user.phone || !user.username || !user.password) {
             return {status: 400, message: "Todos os campos devem ser preenchidos, tente novamente."}
         }
-        // VALIDAR SE EMAIL ESTÁ NO FORMATO CORRETO(FAZER APOS O MICROSERVICO ESTAR PRONTO)
+        
+        const emailIsValid = await this.emailValidatorService.validate(user.email);
+
+        if(!emailIsValid) return {status: 400, message: "Formato do email inválido."}
 
         const userExists = await this.userService.existsUserByMailOrUsername(user.email, user.username);
 
