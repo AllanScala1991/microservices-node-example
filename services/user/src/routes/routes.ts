@@ -1,5 +1,6 @@
 import { Request, Response, Router } from "express";
 import { UserController } from "../controllers/userController";
+import auth from "../middlewares/authentication/auth"
 
 const app = Router();
 const userController = new UserController();
@@ -38,15 +39,15 @@ app.get("/:id?", async (req: Request, res: Response) => {
     }
 })
 
-app.put("/", async (req: Request, res: Response) => {
-    const {id, name, email, phone, username, password} = req.body;
+app.put("/", auth, async (req: Request, res: Response) => {
+    const {id, name, email, phone, username} = req.body;
 
     const response = await userController.update({name, email, phone, username}, id);
 
     res.status(response.status).send(response);
 })
 
-app.delete("/:id", async (req: Request, res: Response) => {
+app.delete("/:id", auth, async (req: Request, res: Response) => {
     const id = req.params.id;
 
     const response = await userController.delete(id);

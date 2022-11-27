@@ -46,7 +46,6 @@ export class UserService implements IUserService {
 
             if(!passwordIsValid) return {status: 401, message: "Usuário ou Senha incorretos, tente novamente."}
 
-            // CRIAR O TOKEN APOS O MICROSERVICO DE AUTENTICACAO FOR CRIADO
             const auth = await this.getToken(usernameIsValid.name, usernameIsValid.email);
 
             if(!auth.data.token) return {status: 401, message: "Usuário ou Senha incorretos, tente novamente."}
@@ -155,7 +154,7 @@ export class UserService implements IUserService {
     }
 
         private async getToken(name: string, email: string): Promise<{data: {status: number, token?: string, message?: string}}> {
-            return await axios.post(process.env.TOKEN_SERVICE, {
+            return await axios.post(`${process.env.TOKEN_SERVICE}/token`, {
                 name: name,
                 email: email
             })

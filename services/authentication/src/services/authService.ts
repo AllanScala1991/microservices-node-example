@@ -26,6 +26,7 @@ export class AuthenticationService implements IAuthentication {
             return {status: 200, verify: tokenVerify}
 
         } catch (error) {
+            
             return {status: 401, message: "Usuário não autorizado."}
         }
     }
