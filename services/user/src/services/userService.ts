@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 import { Encrypter } from "../../utils/bcryptjs";
 import { IUserCreated, Response, IUserResponse, IUserService } from "../dto/userDTO";
 import {UserRepository} from "../repository/userRepository";
@@ -73,10 +73,10 @@ export class UserService implements IUserService {
         }
     }
 
-    async findAll(): Promise<Response> {
+    async findAll(): Promise<{status: number, data?: IUserResponse[], message?: string}> {
         try {
             const users = await this.userRepository.user.findMany()
-            let usersResponse = []
+            let usersResponse: IUserResponse[] = [];
 
             for(let user of users) {
                 delete user.password;
@@ -90,16 +90,16 @@ export class UserService implements IUserService {
         }
     }
 
-    async existsUserByMailOrUsername(email: string, username: string): Promise<Response> {
+    async existsUserByMailOrUsername(emailOrUsername: string): Promise<Response> {
         try {
             const user = await this.userRepository.user.findFirst({
                 where: {
                     OR: [
                         {
-                            email: email
+                            email: emailOrUsername
                         },
                         {
-                            username: username
+                            username: emailOrUsername
                         }
                     ]
                 }

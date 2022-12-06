@@ -1,4 +1,5 @@
 export interface IUserResponse {
+    id?: string
     name: string
     email: string
     phone: string
@@ -11,7 +12,7 @@ export interface IUserCreated extends IUserResponse{
 
 export interface Response {
     status: number
-    data?: IUserResponse | IUserResponse[]
+    data?: IUserResponse
     message?: string
     token?: string
 }
@@ -20,8 +21,8 @@ export interface IUserService {
     create(user: IUserCreated): Promise<Response>
     login(username: String, password: String): Promise<Response>
     findById(id: String): Promise<Response>
-    findAll(): Promise<Response>
-    existsUserByMailOrUsername(email: string, username: string): Promise<Response>
+    findAll(): Promise<{status: number, data?: IUserResponse[], message?: string}>
+    existsUserByMailOrUsername(emailOrUsername: string): Promise<Response>
     update(user: IUserResponse, id: string): Promise<Response>
     delete(id: String): Promise<Response>
 }

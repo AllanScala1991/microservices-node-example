@@ -19,9 +19,15 @@ export class UserController implements IUserService {
 
         if(!emailIsValid) return {status: 400, message: "Formato do email inválido."}
 
-        const userExists = await this.userService.existsUserByMailOrUsername(user.email, user.username);
+        const userEmailExists = await this.userService.existsUserByMailOrUsername(user.email);
 
-        if(userExists.data) {
+        if(userEmailExists.data) {
+            return {status: 409, message: "Usuário já cadastrado, recupere a senha ou tente novamente."}
+        }
+
+        const userUsernameExists = await this.userService.existsUserByMailOrUsername(user.username);
+
+        if(userUsernameExists.data) {
             return {status: 409, message: "Usuário já cadastrado, recupere a senha ou tente novamente."}
         }
 
@@ -42,14 +48,14 @@ export class UserController implements IUserService {
         return await this.userService.findById(id);
     }
 
-    async findAll(): Promise<Response> {
+    async findAll(): Promise<{status: number, data?: IUserResponse[], message?: string}> {
         return await this.userService.findAll();
     }
 
-    async existsUserByMailOrUsername(email: string, username: string): Promise<Response> {
-        if(!email || !username) return {status: 400, message: "Email ou Username inválidos."}
+    async existsUserByMailOrUsername(emailOrUsername: string): Promise<Response> {
+        if(!emailOrUsername) return {status: 400, message: "Email ou Username inválidos."}
 
-        return await this.userService.existsUserByMailOrUsername(email, username);
+        return await this.userService.existsUserByMailOrUsername(emailOrUsername);
     }
 
     async update(user: IUserResponse, id: string): Promise<Response> {
