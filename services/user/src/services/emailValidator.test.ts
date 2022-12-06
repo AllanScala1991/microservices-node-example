@@ -1,9 +1,9 @@
-import { DeepValidator } from "./deepEmailValidator"
+import { EmailValidatorService } from "./emailValidatorService";
 
-let deepValidator: DeepValidator;
+let deepValidator: EmailValidatorService;
 
 beforeAll(() => {
-    deepValidator = new DeepValidator();
+    deepValidator = new EmailValidatorService();
 })
 
 test("Send valid email", async () => {
