@@ -48,8 +48,6 @@ export class UserService implements IUserService {
 
             const auth = await this.getToken(usernameIsValid.name, usernameIsValid.email);
 
-            if(!auth.data.token) return {status: 401, message: "Usuário ou Senha incorretos, tente novamente."}
-
             return {status: 200, token: auth.data.token}
             
         } catch (error) {
