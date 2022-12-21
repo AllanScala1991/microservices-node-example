@@ -151,10 +151,10 @@ export class UserService implements IUserService {
         }
     }
 
-        private async getToken(name: string, email: string): Promise<{data: {status: number, token?: string, message?: string}}> {
-            return await axios.post(`${process.env.TOKEN_SERVICE}/token`, {
-                name: name,
-                email: email
-            })
-        }
+    private async getToken(name: string, email: string): Promise<{data: {status: number, token?: string, message?: string}}> {
+        return await axios.post(`${process.env.TOKEN_SERVICE}/token`, {
+            name: name,
+            email: email
+        })
+    }
 }

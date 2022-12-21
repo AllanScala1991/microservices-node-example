@@ -8,3 +8,38 @@ services:
       POSTGRES_PASSWORD: "root"
     ports:
       - 5432:5432
+
+  api-gateway:
+    image: api_gateway
+    depends_on:
+      - postgres
+    container_name: api-gateway
+    command: bash -c "npm run dev"
+    ports:
+      - 3000:3000
+  
+  service-user:
+    image: service_user
+    depends_on:
+      - service-authentication
+    container_name: service-user
+    environment:
+      DATABASE_URL: "postgresql://postgres:root@172.17.0.1:5432/medical_helper?schema=user"
+      GATEWAY: "http://172.17.0.1:3000"
+      TOKEN_SERVICE: "http://172.17.0.1:3009"
+    command: bash -c "npx prisma migrate dev && npm run dev"
+    ports:
+      - 3001:3001
+
+  service-authentication:
+    image: service_authentication
+    depends_on:
+      - api-gateway
+    container_name: service-authentication
+    environment:
+      GATEWAY: "http://172.17.0.1:3000"
+      USER_SERVICE: "http://172.17.0.1:3001"
+      SECRET_TOKEN: "462b2f26f8b73b6090bea206d2ce7550"
+    command: bash -c "npm run dev"
+    ports:
+      - 3009:3009

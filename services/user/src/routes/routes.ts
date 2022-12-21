@@ -5,7 +5,7 @@ import auth from "../middlewares/authentication/auth"
 const app = Router();
 const userController = new UserController();
 
-app.get("/health", (res: Response) => {
+app.get("/health", (req: Request, res: Response) => {
     res.send("User service is online");
 })
 
