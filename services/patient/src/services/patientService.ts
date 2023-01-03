@@ -80,9 +80,19 @@ export class PatientService implements IPatient {
             return {status: 500, message: error}
         }
     }
-    
-    delete(id: string): Promise<Response> {
-        throw new Error("Method not implemented.");
+
+    async delete(id: string): Promise<Response> {
+        try {
+            await this.patientRepository.patient.delete({
+                where: {
+                    id: id
+                }
+            });
+
+            return {status: 200, message: "Paciente deletado com sucesso."};
+        } catch (error) {
+            return {status: 500, message: error}
+        }
     }
     
 }
