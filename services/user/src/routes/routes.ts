@@ -6,7 +6,7 @@ const app = Router();
 const userController = new UserController();
 
 app.get("/health", (req: Request, res: Response) => {
-    res.send("User service is online");
+    res.status(200).send("User service is online");
 })
 
 app.post("/create", async (req: Request, res: Response) => {
