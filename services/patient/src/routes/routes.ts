@@ -1,5 +1,6 @@
 import { Router, Request, Response } from "express";
 import { PatientController } from "../controllers/patientController";
+import auth from "../middlewares/auth"
 
 const app = Router();
 const patientController = new PatientController();
@@ -8,7 +9,7 @@ app.get("/health", (req: Request, res: Response) => {
     res.status(200).send("Patient service is online");
 })
 
-app.post("/create", async (req: Request, res: Response) => {
+app.post("/create", auth, async (req: Request, res: Response) => {
     const {name, email, address, consults, cpf, exams, genrer, insurance, phone} = req.body;
 
     const response = await patientController.create({name, email, address, consults, cpf, exams, 
@@ -17,7 +18,7 @@ app.post("/create", async (req: Request, res: Response) => {
     res.status(response.status).send(response);
 })
 
-app.get("/:id?", async (req: Request, res: Response) => {
+app.get("/:id?", auth, async (req: Request, res: Response) => {
     const id = req.params.id;
 
     if(id) {
@@ -31,7 +32,7 @@ app.get("/:id?", async (req: Request, res: Response) => {
     }
 })
 
-app.put("/", async (req: Request, res: Response) => {
+app.put("/", auth, async (req: Request, res: Response) => {
     const {id, address, consults, email, exams, genrer, insurance, name, phone} = req.body;
 
     const response = await patientController.update(id, {address, consults, email, exams, genrer, 
@@ -40,7 +41,7 @@ app.put("/", async (req: Request, res: Response) => {
     res.status(response.status).send(response);
 })
 
-app.delete("/:id", async (req: Request, res: Response) => {
+app.delete("/:id", auth, async (req: Request, res: Response) => {
     const id = req.params.id;
 
     const response = await patientController.delete(id);
