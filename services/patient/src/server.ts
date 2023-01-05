@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 //PATIENT ROUTES
-
+app.use(require("./routes/routes"));
 
 app.listen(port, () => {
     console.log("Patient service is running...");

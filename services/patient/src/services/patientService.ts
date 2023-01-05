@@ -49,6 +49,8 @@ export class PatientService implements IPatient {
                     id: id
                 }
             })
+            
+            if(!patient) return {status: 404, message: "Nenhum paciente localizado."};
 
             return {status: 200, data: patient};
         } catch (error) {

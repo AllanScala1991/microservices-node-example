@@ -16,7 +16,7 @@ export class PatientController{
         
         const cpfExists = await this.patientService.findByCpf(patient.cpf);
 
-        if(cpfExists) {return {status: 409, message: "Já existe um paciente cadastrado com esse documento."}};
+        if(cpfExists.data) {return {status: 409, message: "Já existe um paciente cadastrado com esse documento."}};
 
         const createPatient = await this.patientService.create(patient);
 
