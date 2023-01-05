@@ -2,6 +2,7 @@ export interface IPatient {
     create(patient: IPatientModel): Promise<Response>
     findAll(): Promise<{status: number, data?: IPatientResponseModel[], message?: string}>
     findById(id: string): Promise<Response>
+    findByCpf(cpf: string): Promise<Response>
     update(id: string, patient: IPatientUpdateModel): Promise<Response>
     delete(id: string): Promise<Response>
 }

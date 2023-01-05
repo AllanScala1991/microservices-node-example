@@ -66,6 +66,26 @@ test("Find patient by ID", async () => {
     expect(findPatient.data.name).toEqual("Patient Name");
 })
 
+test("Find patient by CPF", async () => {
+    const patient = await patientService.create({
+        name: "Fynd By CPF",
+        email: `${chance().name()}@email.com`,
+        genrer: "M",
+        phone: "4199999-9999",
+        cpf: "12345678901",
+        address: "Rua das andorinhas - 559",
+        insurance: "Mediprev LTDA",
+        consults: ["a78s6d8ad76a8s6786a8sd687as68d6as", "45g3h4f53h54f3g54h3f54g3h54f3g5h3f"],
+        exams: ["d235y34g676f74ç5v6gh4cvghk23gc42h"]
+    })
+    patientId.push(patient.data.id);
+
+    const findPatient = await patientService.findByCpf("12345678901");
+
+    expect(findPatient.status).toEqual(200);
+    expect(findPatient.data.name).toEqual("Fynd By CPF");
+})
+
 test("Find patient with invalid ID", async () => {
     const findPatient = await patientService.findById("invalid");
 

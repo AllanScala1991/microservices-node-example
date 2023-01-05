@@ -56,6 +56,20 @@ export class PatientService implements IPatient {
         }
     }
 
+    async findByCpf(cpf: string): Promise<Response> {
+        try {
+            const patient = await this.patientRepository.patient.findFirst({
+                where: {
+                    cpf: cpf
+                }
+            })
+
+            return {status: 200, data: patient}
+        } catch (error) {
+            return {status: 500, message: error}
+        }
+    }
+
     async update(id: string, patient: IPatientUpdateModel): Promise<Response> {
         try {
             const patientUpdated = await this.patientRepository.patient.update({
